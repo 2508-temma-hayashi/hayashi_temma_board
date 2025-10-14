@@ -2,7 +2,7 @@ package com.example.hayashi_temma.controller;
 
 
 import com.example.hayashi_temma.controller.form.LoginForm;
-import com.example.hayashi_temma.repository.entity.Users;
+import com.example.hayashi_temma.repository.entity.User;
 import com.example.hayashi_temma.service.LoginService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +56,7 @@ public class LoginController {
             return mav;
         }
 
-        Users user = loginService.findLoginUser(form);
+        User user = loginService.findLoginUser(form);
         session.setAttribute("loginUser", user);
         return new ModelAndView("redirect:/home");
     }

@@ -1,6 +1,6 @@
 package com.example.hayashi_temma.repository;
 
-import com.example.hayashi_temma.repository.entity.Messages;
+import com.example.hayashi_temma.repository.entity.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -8,12 +8,12 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface MessagesRepository extends JpaRepository<Messages, Integer> {
+public interface CommentRepository extends JpaRepository<Comment, Integer> {
 
     @Query("""
-        SELECT m FROM Messages m
-        JOIN FETCH m.user
-        ORDER BY m.createdDate DESC
+        SELECT c FROM Comment c
+        JOIN FETCH c.user
+        ORDER BY c.createdDate ASC
     """)
-    List<Messages> findAllMessages();
+    List<Comment> findAllComments();
 }

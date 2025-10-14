@@ -1,8 +1,8 @@
 package com.example.hayashi_temma.service;
 
 import com.example.hayashi_temma.controller.form.LoginForm;
-import com.example.hayashi_temma.repository.UsersRepository;
-import com.example.hayashi_temma.repository.entity.Users;
+import com.example.hayashi_temma.repository.UserRepository;
+import com.example.hayashi_temma.repository.entity.User;
 import com.example.hayashi_temma.utils.CipherUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,11 +10,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class LoginService {
     @Autowired
-    UsersRepository usersRepository;
+    UserRepository userRepository;
 
     public String checkLogin(LoginForm form) {
         String encryptedPassword = CipherUtil.encrypt(form.getPassword());
-        Users user = usersRepository.findByAccountAndPassword(form.getAccount(), encryptedPassword);
+        User user = userRepository.findByAccountAndPassword(form.getAccount(), encryptedPassword);
 
         if (user == null) {
             return "ログインに失敗しました。";
@@ -27,9 +27,9 @@ public class LoginService {
         return null;
     }
 
-    public Users findLoginUser(LoginForm form) {
+    public User findLoginUser(LoginForm form) {
         String encryptedPassword = CipherUtil.encrypt(form.getPassword());
-        return usersRepository.findByAccountAndPassword(form.getAccount(), encryptedPassword);
+        return userRepository.findByAccountAndPassword(form.getAccount(), encryptedPassword);
     }
 
 }
