@@ -8,8 +8,8 @@
 <h2>ログイン</h2>
 
 <!-- エラーメッセージ -->
-<div th:if="${errorMessage}">
-    <p th:text="${errorMessage}" style="color:red;"></p>
+<div th:if="${errorMessages != null}">
+    <li th:each="err : ${errorMessages} th:text=${err}"></li>
 </div>
 
 <form th:action="@{/login}" method="post">

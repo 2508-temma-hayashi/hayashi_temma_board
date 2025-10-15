@@ -1,5 +1,6 @@
 package com.example.hayashi_temma.controller;
 
+import com.example.hayashi_temma.controller.form.MessageSearchForm;
 import com.example.hayashi_temma.repository.entity.Comment;
 import com.example.hayashi_temma.repository.entity.Message;
 import com.example.hayashi_temma.repository.entity.User;
@@ -10,8 +11,10 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -22,7 +25,7 @@ public class HomeController {
     CommentService commentService;
 
     @GetMapping("/home")
-    public ModelAndView showHome(HttpSession session){
+    public ModelAndView showHome(@ModelAttribute MessageSearchForm form, HttpSession session){
         ModelAndView mav = new ModelAndView("home");
 
         //ログインしているのが総務人事部かセッションから確認
@@ -36,14 +39,30 @@ public class HomeController {
             buttonFlag = "ON";
         }
 
+        LocalDateTime startDate = (form.getStartDate() != null)
+                ? form.getStartDate().atStartOfDay()
+                : LocalDateTime.of(2022, 1, 1, 0, 0, 0);
+
+        LocalDateTime endDate = (form.getEndDate() != null)
+                ? form.getEndDate().atTime(23, 59, 59)
+                : LocalDateTime.now();
+
+        String category = (form.getCategory() != null && !form.getCategory().isBlank())
+                ? form.getCategory()
+                : null;
+
+
+
         // 投稿一覧取得
-        List<Message> messageList = homeService.findAllMessages();
+        List<Message> messageList = homeService.findFilteredMessages(startDate, endDate, category);
         List<Comment> commentList = commentService.findAllComments();
 
         //home.html遷移して、ユーザー情報とボタンフラグを渡す。
         mav.addObject("loginUser", loginUser);
+        mav.addObject("commentList", commentList);
         mav.addObject("messageList", messageList);
         mav.addObject("buttonFlag", buttonFlag);
+        mav.addObject("searchForm", form);
         return mav;
     }
 }

@@ -19,42 +19,56 @@
     <a th:href="@{/user/list}">ユーザ管理画面</a>
 </li>
 
+<li><a th:href="@{/post}">ログアウト</a></li>
+
 
 
 <!-- 絞り込みフォーム -->
-<form th:action="@{/home}" method="get">
-    <label>開始日：</label><input type="date" name="start"><br>
-    <label>終了日：</label><input type="date" name="end"><br>
+<form th:action="@{/home}" th:object="${searchForm}" method="get">
+    <label>開始日：</label><input type="date" th:field="*{startDate}"><br>
+    <label>終了日：</label><input type="date" th:field="*{endDate}"><br>
     <label>カテゴリ：</label>
-    <input type="text" name="category" th:value="${category}">
+    <input type="text" th:field="*{category}">
     <button type="submit">絞り込み</button>
 </form>
+
 
 <hr>
 
 <!-- 投稿一覧（後でth:eachで繰り返しに変える） -->
 <!-- 投稿一覧 -->
-<div>
+<div class="post-area">
     <h3>投稿一覧</h3>
-    <table border="1">
-        <tr>
-            <th>投稿者</th>
-            <th>内容</th>
-            <th>日時</th>
-        </tr>
-        <tr th:each="msg : ${messageList}">
-            <td th:text="${msg.user.name}">山田太郎</td>
-            <td th:text="${msg.text}">テスト投稿です</td>
-            <td th:text="${#temporals.format(msg.createdDate, 'yyyy/MM/dd HH:mm')}">2025/10/14 15:00</td>
-        </tr>
-    </table>
+
+    <!-- 投稿ごとにループ -->
+    <div class="post-box" th:each="msg : ${messageList}">
+        <div class="post-header">
+            <strong th:text="${msg.user.name}">投稿者</strong>
+            <span class="post-date" th:text="${#temporals.format(msg.createdDate, 'yyyy/MM/dd HH:mm')}"></span>
+        </div>
+
+        <div class="post-content">
+            <p th:text="${msg.text}"></p>
+        </div>
+
+        <!-- 🔽 コメントループを投稿ループの中に入れる -->
+        <div class="comment-area">
+            <div class="comment-box"
+                 th:each="c : ${commentList}"
+                 th:if="${c.message.id == msg.id}">
+                <div class="comment-header">
+                    <span th:text="${c.user.name}">コメント者</span>
+                    <span class="comment-date"
+                          th:text="${#temporals.format(c.createdDate, 'yyyy/MM/dd HH:mm')}"></span>
+                </div>
+                <div class="comment-content">
+                    <p th:text="${c.text}"></p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
-<!-- コメント一覧（後で別ファイル化） -->
-<div>
-    <h3>コメント一覧</h3>
-    <p>ここにコメントを表示する予定</p>
-</div>
 
 </body>
 </html>

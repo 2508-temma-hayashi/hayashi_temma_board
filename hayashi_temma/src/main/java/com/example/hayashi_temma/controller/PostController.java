@@ -1,0 +1,38 @@
+package com.example.hayashi_temma.controller;
+
+import com.example.hayashi_temma.controller.form.PostForm;
+import com.example.hayashi_temma.repository.entity.User;
+import com.example.hayashi_temma.service.PostService;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+@Controller
+public class PostController {
+
+    @Autowired
+    PostService postService;
+
+    @Autowired
+    HttpSession session;
+
+    @GetMapping("/post")
+    public ModelAndView showPost(){
+        ModelAndView mav = new ModelAndView("post");
+        mav.addObject("postForm", new PostForm());
+        return mav;
+    }
+
+    @PostMapping("/post")
+    public ModelAndView doPost(@ModelAttribute PostForm form){
+        User loginUser = (User) session.getAttribute("loginUser");
+
+        postService.postMessage(form, loginUser);
+
+        return new ModelAndView("redirect:/home");
+    }
+}
