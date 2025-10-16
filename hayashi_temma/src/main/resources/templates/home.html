@@ -19,12 +19,12 @@
     <a th:href="@{/user/list}">ユーザ管理画面</a>
 </li>
 
-<li><a th:href="@{/post}">ログアウト</a></li>
+<li><a th:href="@{/logout}">ログアウト</a></li>
 
 
 
 <!-- 絞り込みフォーム -->
-<form th:action="@{/home}" th:object="${searchForm}" method="get">
+<form th:action="@{/home}" th:object="${messsageSearchForm}" method="get">
     <label>開始日：</label><input type="date" th:field="*{startDate}"><br>
     <label>終了日：</label><input type="date" th:field="*{endDate}"><br>
     <label>カテゴリ：</label>

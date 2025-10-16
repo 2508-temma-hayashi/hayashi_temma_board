@@ -9,12 +9,10 @@ import jakarta.validation.constraints.Pattern;
 @Getter
 @Setter
 public class LoginForm {
-
-    @NotBlank(message = "アカウントを入力してください。")
-    @Pattern(regexp = "^(?![\\s　]*$).+$", message = "アカウントを入力してください")
+    //(?![\\s　]*$)で否定の先読みをしてその後に「何かしらの文字」が1文字以上 .+ 続いて、行末 $ で終わる。という正規表現
+    @Pattern(regexp = "^(?![\\s　]*$).+$", message = "アカウントを入力してください。")
     private String account;
 
-    @NotBlank(message = "パスワードを入力してください。")
-    @Pattern(regexp = "^(?![\\s　]*$).+$", message = "パスワードを入力してください")
+    @Pattern(regexp = "^(?![\\s　]*$).+$", message = "パスワードを入力してください。")
     private String password;
 }

@@ -12,9 +12,10 @@
 
 <div class="main-contents">
     <div th:if="${errorMessages != null}">
-        <<li th:each="err : ${errorMessages}" th:text="${err}"></li>
+        <li th:each="err : ${errorMessages}" th:text="${err}"></li>
     </div>
 
+    //th:objectでFORMを指定し、th:fieldで属性を指定する。
     <form th:action="@{/post}" method="post" th:object="${postForm}">
         <label>件名</label>
         <input type="text" th:field="*{title}"><br/>

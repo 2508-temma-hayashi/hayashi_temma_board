@@ -36,26 +36,29 @@ public class LoginController {
 
 
     @PostMapping("/login")
+    //@ModelAttributeがHTMLのth:object="${loginForm}" に対応するものをバインドしてformに入れてそれにloginForm属性を付与する
     public ModelAndView doLogin(@ModelAttribute @Validated LoginForm form, BindingResult result, HttpSession session){
 
         List<String> errorMessages = getErrorMessages(result);
 
+        //アノテーションでチェックしている入力、文字数チェック
         if (result.hasErrors()) {
             ModelAndView mav = new ModelAndView("login");
             mav.addObject("errorMessages", errorMessages);
-            mav.addObject("formModel", form); // 入力内容を保持
+            mav.addObject("loginForm", form); // 入力内容を保持するために
             return mav;
         }
 
+        //停止中のアカウントではないかの確認と、アカウントが存在するかの確認
         String errorMessage = loginService.checkLogin(form);
         if (errorMessage != null) {
             ModelAndView mav = new ModelAndView("login");
             errorMessages.add(errorMessage);
             mav.addObject("errorMessages", errorMessages);
-            mav.addObject("formModel", form);
+            mav.addObject("loginForm", form);//入力内容を保持するために
             return mav;
         }
-
+        //フォームの中身（入力値）だけでは信用できないからDBから持ってきてる
         User user = loginService.findLoginUser(form);
         session.setAttribute("loginUser", user);
         return new ModelAndView("redirect:/home");

@@ -30,7 +30,7 @@ public class HomeController {
 
         //ログインしているのが総務人事部かセッションから確認
         User loginUser = (User) session.getAttribute("loginUser");
-        //ログインしてなかったrあlogin画面に
+        //ログインしてなかったらlogin画面に
         if (loginUser == null) {
             return new ModelAndView("redirect:/login");
         }
@@ -62,7 +62,7 @@ public class HomeController {
         mav.addObject("commentList", commentList);
         mav.addObject("messageList", messageList);
         mav.addObject("buttonFlag", buttonFlag);
-        mav.addObject("searchForm", form);
+        mav.addObject("MessageSearchForm", form);
         return mav;
     }
 }

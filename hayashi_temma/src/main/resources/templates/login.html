@@ -8,17 +8,21 @@
 <h2>ログイン</h2>
 
 <!-- エラーメッセージ -->
-<div th:if="${errorMessages != null}">
-    <li th:each="err : ${errorMessages} th:text=${err}"></li>
+<div th:if="${errorMessages != null}" >
+    <li th:each="err : ${errorMessages}" th:text="${err}"></li>
 </div>
 
-<form th:action="@{/login}" method="post">
+<!--「このフォームは loginForm という箱に入るデータを扱うんだよ」ってth:objectで伝えてる-->
+<form th:action="@{/login}" th:object="${loginForm}" method="post">
     <label>アカウント：</label>
 
-    <input type="text" name="account" required><br>
+    <!--<input name="account" value="${loginForm.account}">に変換してくれてる-->
+    <!--typeを省略すると自動でtextになる-->
+    <!--この書き方ならエラー出ても入力内容が保持される-->
+    <input th:field="*{account}"><br>
 
     <label>パスワード：</label>
-    <input type="password" name="password" required><br>
+    <input type="password" th:field="*{password}"><br>
 
     <button type="submit">ログイン</button>
 </form>

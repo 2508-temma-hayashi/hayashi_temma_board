@@ -12,6 +12,7 @@ public class LoginService {
     @Autowired
     UserRepository userRepository;
 
+    //ユーザー情報が存在するか、停止中のアカウントではないかのチェック
     public String checkLogin(LoginForm form) {
         String encryptedPassword = CipherUtil.encrypt(form.getPassword());
         User user = userRepository.findByAccountAndPassword(form.getAccount(), encryptedPassword);

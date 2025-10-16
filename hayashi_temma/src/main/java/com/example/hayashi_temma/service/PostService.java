@@ -16,13 +16,15 @@ public class PostService {
     MessageRepository messageRepository;
 
     public void postMessage(PostForm form, User loginUser) {
+        //PostformをPostEntityに変換
         Message message = new Message();
         message.setTitle(form.getTitle());
         message.setText(form.getText());
         message.setCategory(form.getCategory());
         message.setUser(loginUser);
         message.setCreatedDate(LocalDateTime.now());
-
+        message.setUpdatedDate(LocalDateTime.now());
+        //JPAを継承してるからsaveメソッド使える
         messageRepository.save(message);
     }
 

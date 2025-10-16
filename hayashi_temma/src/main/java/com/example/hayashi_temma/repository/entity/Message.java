@@ -36,4 +36,8 @@ public class Message {
     // 投稿日時
     @Column(name = "created_date")
     private LocalDateTime createdDate;
+
+    // 投稿日時
+    @Column(name = "updated_date")
+    private LocalDateTime updatedDate;
 }
