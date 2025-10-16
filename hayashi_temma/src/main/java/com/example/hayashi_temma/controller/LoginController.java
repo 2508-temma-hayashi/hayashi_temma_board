@@ -60,6 +60,7 @@ public class LoginController {
         }
         //フォームの中身（入力値）だけでは信用できないからDBから持ってきてる
         User user = loginService.findLoginUser(form);
+        //mavはリダイレクトすると初期化されるのでsession
         session.setAttribute("loginUser", user);
         return new ModelAndView("redirect:/home");
     }

@@ -29,6 +29,8 @@ public class Message {
     private String category;
 
     // 投稿者（外部キー）
+    //@ManyToOne	「多対一（Many-to-One）」の関係を定義
+    //@JoinColumn(name = "user_id")	結合に使う外部キー列（FK）を指定
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

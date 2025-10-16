@@ -24,7 +24,7 @@
 
 
 <!-- 絞り込みフォーム -->
-<form th:action="@{/home}" th:object="${messsageSearchForm}" method="get">
+<form th:action="@{/home}" th:object="${messageSearchForm}" method="get">
     <label>開始日：</label><input type="date" th:field="*{startDate}"><br>
     <label>終了日：</label><input type="date" th:field="*{endDate}"><br>
     <label>カテゴリ：</label>
@@ -49,6 +49,13 @@
 
         <div class="post-content">
             <p th:text="${msg.text}"></p>
+        </div>
+
+        <!--投稿のユーザーIDとログインしている人のユーザーIDが同じ時だけボタンを表示  -->
+        <div class="delete_button" th:if="${msg.user.id == loginUser.id}">
+            <form th:action="@{/delete/{id}(id=${msg.id})}" method="post" onsubmit="return confirm('本当に削除しますか？');">
+                <input type="submit" value="削除">
+            </form>
         </div>
 
         <!-- 🔽 コメントループを投稿ループの中に入れる -->

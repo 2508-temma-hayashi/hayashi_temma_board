@@ -62,7 +62,7 @@ public class HomeController {
         mav.addObject("commentList", commentList);
         mav.addObject("messageList", messageList);
         mav.addObject("buttonFlag", buttonFlag);
-        mav.addObject("MessageSearchForm", form);
+        mav.addObject("messageSearchForm", form);
         return mav;
     }
 }
