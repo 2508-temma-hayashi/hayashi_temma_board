@@ -35,7 +35,6 @@
 
 <hr>
 
-<!-- 投稿一覧（後でth:eachで繰り返しに変える） -->
 <!-- 投稿一覧 -->
 <div class="post-area">
     <h3>投稿一覧</h3>
@@ -53,23 +52,40 @@
 
         <!--投稿のユーザーIDとログインしている人のユーザーIDが同じ時だけボタンを表示  -->
         <div class="delete_button" th:if="${msg.user.id == loginUser.id}">
-            <form th:action="@{/delete/{id}(id=${msg.id})}" method="post" onsubmit="return confirm('本当に削除しますか？');">
+            <form th:action="@{/message/delete/{id}(id=${msg.id})}" method="post" onsubmit="return confirm('本当に削除しますか？');">
                 <input type="submit" value="削除">
             </form>
         </div>
+        <!--コメント入力フォーム-->
+        <!--th:objectに入れた時点でth:fieldはプロパティを指定できる！-->
+        <form th:action="@{/comment}" th:object="${commentForm}" method="post">
+            <!--msgidはかわらないものだし保持したいわけでもない。都度取得すればいいものなのでth:field使わなくていい-->
+            <!--Controllerの @ModelAttribute CommentForm form では form.getMessageId() に対応する。つまりフォームオブジェクトのプロパティ名と一致させる。-->
+            <input type="hidden" name="messageId" th:value="${msg.id}">
+            <!--なのでth:fieldはcommentFormのなかのプロパティを指す。システムに知らせてる-->
+            <textarea th:field="*{text}" rows="2" cols="40"></textarea>
+            <input type="submit" value="コメントする">
+        </form>
 
-        <!-- 🔽 コメントループを投稿ループの中に入れる -->
+        <!--  コメントループを投稿ループの中に入れる -->
         <div class="comment-area">
             <div class="comment-box"
                  th:each="c : ${commentList}"
                  th:if="${c.message.id == msg.id}">
                 <div class="comment-header">
-                    <span th:text="${c.user.name}">コメント者</span>
+                    <span th:text="${c.user.name}"></span>
                     <span class="comment-date"
                           th:text="${#temporals.format(c.createdDate, 'yyyy/MM/dd HH:mm')}"></span>
                 </div>
+                <!--コメント本文-->
                 <div class="comment-content">
                     <p th:text="${c.text}"></p>
+                </div>
+                <!--削除ボタン-->
+                <div class="delete_button" th:if="${c.user.id == loginUser.id}">
+                    <form th:action="@{/comment/delete/{id}(id=${c.id})}" method="post" onsubmit="return confirm('本当に削除しますか？');">
+                        <input type="submit" value="削除">
+                    </form>
                 </div>
             </div>
         </div>

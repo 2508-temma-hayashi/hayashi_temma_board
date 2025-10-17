@@ -30,6 +30,7 @@ public class LoginController {
         ModelAndView mav = new ModelAndView("login");
 
         List<String> errorMessages = new ArrayList<>();
+        mav.addObject("loginForm", new LoginForm());
 
         return mav;
     }

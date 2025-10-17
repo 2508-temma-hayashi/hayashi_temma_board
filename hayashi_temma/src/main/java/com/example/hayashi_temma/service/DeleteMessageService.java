@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DeleteService {
+public class DeleteMessageService {
     @Autowired
     MessageRepository messageRepository;
 
@@ -20,6 +20,8 @@ public class DeleteService {
         if(message.getUser().getId() == userId){
             messageRepository.deleteById(messageId);
             return true;
+        }else if(message.getUser().getId() != userId){
+            return false;
         }
         //elseのほうがいいかな？
         return false;

@@ -9,11 +9,11 @@ import java.util.List;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Integer> {
-
     @Query("""
-        SELECT c FROM Comment c
-        JOIN FETCH c.user
-        ORDER BY c.createdDate ASC
-    """)
+    SELECT c FROM Comment c
+    JOIN FETCH c.user
+    JOIN FETCH c.message
+    ORDER BY c.createdDate ASC
+""")
     List<Comment> findAllComments();
 }

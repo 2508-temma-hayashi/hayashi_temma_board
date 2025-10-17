@@ -1,5 +1,6 @@
 package com.example.hayashi_temma.controller;
 
+import com.example.hayashi_temma.controller.form.CommentForm;
 import com.example.hayashi_temma.controller.form.MessageSearchForm;
 import com.example.hayashi_temma.repository.entity.Comment;
 import com.example.hayashi_temma.repository.entity.Message;
@@ -58,6 +59,7 @@ public class HomeController {
         List<Comment> commentList = commentService.findAllComments();
 
         //home.html遷移して、ユーザー情報とボタンフラグを渡す。
+        mav.addObject("commentForm", new CommentForm());
         mav.addObject("loginUser", loginUser);
         mav.addObject("commentList", commentList);
         mav.addObject("messageList", messageList);
