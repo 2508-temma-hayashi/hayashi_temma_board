@@ -36,6 +36,10 @@
             <td>
                 <!--編集ボタン-->
                 <!--停止と復活の切り替えボタン-->
+                <form th:action="@{/user/update/{id}(id=${user.id})}" method="post"
+                      onsubmit="return confirm('本当に変更していいですか？');">
+                    <button type="submit" th:text="${user.isStopped == 1 ? '復活' : '停止'}"></button>
+                </form>
             </td>
         </tr>
 

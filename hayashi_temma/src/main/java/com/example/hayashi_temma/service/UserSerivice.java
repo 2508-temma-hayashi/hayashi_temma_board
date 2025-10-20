@@ -15,4 +15,19 @@ public class UserSerivice {
     public List<User> getAllUsers() {
         return userRepository.findAllUsersWithBranchAndDepartment();
     }
+
+    public void updatedStatus(int id) {
+
+        User user = userRepository.findById(id).orElse(null);
+        int status = user.getIsStopped();
+        if (status == 0) {
+            user.setIsStopped(1);
+        }else if (status == 1) {
+            user.setIsStopped(0);
+        }
+
+        userRepository.save(user);
+    }
+
+
 }

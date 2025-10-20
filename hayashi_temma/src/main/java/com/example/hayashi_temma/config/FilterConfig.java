@@ -23,7 +23,7 @@ public class FilterConfig {
 
         // URLを指定
         //「/user/list にアクセスが来たら AdministratorFilter を通してから Controller に渡してね」という指定
-        bean.addUrlPatterns("/user/list");
+        bean.addUrlPatterns("/user/list","/user/register");
         // 複数指定したい場合は bean.addUrlPatterns("/user/*", "/admin/*"); みたいに書ける
 
         return bean;
