@@ -39,4 +39,16 @@ public class User {
 
     @Column(name = "updated_date", nullable = false, insertable = false, updatable = false)
     private Timestamp updatedDate;
+
+    //支店名
+    //@ManyToOneは「多対一（Many-to-One）」の関係を定義
+    //@JoinColumn(name = "user_id")	結合に使う外部キーの列を指定している
+    @ManyToOne
+    @JoinColumn(name = "branch_id", insertable = false, updatable = false)
+    private Branch branch;
+
+    //部署名
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "department_id", insertable = false, updatable = false)
+    private Department department;
 }

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ユーザ管理画面</title>
+</head>
+<body>
+<h2>ユーザ管理画面</h2>
+<ul>
+    <li><a th:href="@{/home}">ホームへ戻る</a></li>
+    <li><a th:href="@{/user/register}">ユーザ登録</a></li>
+</ul>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>アカウント</th>
+            <th>氏名</th>
+            <th>支店ID</th>
+            <th>支店名</th>
+            <th>部署ID</th>
+            <th>部署名</th>
+            <th>ユーザー停止状態</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="user : ${userList}">
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.account}"></td>
+            <td th:text="${user.name}"></td>
+            <td th:text="${user.branchId}"></td>
+            <td th:text="${user.branch.name}"></td>
+            <td th:text="${user.departmentId}"></td>
+            <td th:text="${user.department.name}"></td>
+            <td th:text="${user.isStopped == 1 ? '停止' : '稼働'}"></td>
+            <td>
+                <!--編集ボタン-->
+                <!--停止と復活の切り替えボタン-->
+            </td>
+        </tr>
+
+    </tbody>
+</table>
+
+</body>
+</html>
