@@ -72,6 +72,23 @@ public class UserService {
             errorMessages.add("パスワードと確認用パスワードが一致しません");
         }
 
+        //支社と部署の組み合わせが正しいか確認
+        if (branchId != null && departmentId != null) {
+            boolean invalid = false;
+
+            // 本社(1): 営業部(1)、技術部(2)、総務人事部(3)
+            // 大阪支社(2): 営業部(1)、技術部(2)
+            // 福岡支社(3): 営業部(1)、技術部(2)
+            switch (branchId) {
+                case 1 -> invalid = (departmentId == 1 || departmentId == 2 || departmentId == 3);
+                case 2, 3 -> invalid = (departmentId == 1 || departmentId == 2);
+                default -> invalid = true;
+            }
+
+            if (!invalid) {
+                errorMessages.add("支社と部署の組み合わせが不正です");
+            }
+        }
         return errorMessages;
     }
 
