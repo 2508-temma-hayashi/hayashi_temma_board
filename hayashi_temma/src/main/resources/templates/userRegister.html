@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ユーザー登録</title>
+</head>
+<body>
+<h2>ユーザー登録画面</h2>
+<!--メニュー-->
+<ul>
+    <li><a th:href="@{/home}">ホーム画面に戻る</a></li>
+    <li><a th:href="@{/user/list}">ユーザー一覧へ戻る</a></li>
+</ul>
+
+<!--エラーメッセージ表示）-->
+<div th:if="${errorMessages}">
+    <ul>
+        <li th:each="err : ${errorMessages}" th:text="${err}"></li>
+    </ul>
+</div>
+
+<!--登録フォーム-->
+<form th:action="@{/user/register}" th:object="${userForm}" method="post">
+
+    <label>アカウント：</label>
+    <input type="text" th:field="*{account}"><br>
+
+    <label>パスワード：</label>
+    <input type="password" th:field="*{password}"><br>
+
+    <label>確認用パスワード：</label>
+    <input type="password" th:field="*{confirmPassword}"><br>
+
+    <label>氏名：</label>
+    <input type="text" th:field="*{name}"><br>
+
+    <select th:field="*{branchId}">
+        <option value="">--支社を選択--</option>
+        <option value="1">本社</option>
+        <option value="2">大阪支社</option>
+        <option value="3">福岡支社</option>
+    </select><br/>
+
+    <select th:field="*{departmentId}">
+        <option value="">--部署を選択--</option>
+        <option value="1">営業部</option>
+        <option value="2">技術部</option>
+        <option value="3">総務人事部</option>
+    </select><br/>
+
+
+    <button type="submit">登録する</button>
+
+</form>
+
+
+</body>
+</html>

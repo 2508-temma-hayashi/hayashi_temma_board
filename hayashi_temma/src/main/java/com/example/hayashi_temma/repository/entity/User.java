@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -35,10 +36,10 @@ public class User {
     // 0:稼働, 1:停止
 
     @Column(name = "created_date", nullable = false, insertable = false, updatable = false)
-    private Timestamp createdDate;
+    private LocalDateTime createdDate;
 
     @Column(name = "updated_date", nullable = false, insertable = false, updatable = false)
-    private Timestamp updatedDate;
+    private LocalDateTime updatedDate;
 
     //支店名
     //@ManyToOneは「多対一（Many-to-One）」の関係を定義

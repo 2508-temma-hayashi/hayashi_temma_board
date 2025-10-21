@@ -1,0 +1,94 @@
+package com.example.hayashi_temma.service;
+
+import com.example.hayashi_temma.controller.form.UserForm;
+import com.example.hayashi_temma.repository.UserRepository;
+import com.example.hayashi_temma.repository.entity.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+@Service
+public class UserService {
+    @Autowired
+    UserRepository userRepository;
+
+    public List<User> getAllUsers() {
+        return userRepository.findAllUsersWithBranchAndDepartment();
+    }
+
+    //ユーザーの稼働ステータス更新メソッド
+    public void updatedStatus(int id) {
+
+        User user = userRepository.findById(id).orElse(null);
+        int status = user.getIsStopped();
+        if (status == 0) {
+            user.setIsStopped(1);
+        }else if (status == 1) {
+            user.setIsStopped(0);
+        }
+
+        userRepository.save(user);
+    }
+
+    //バリデーションメソッド
+    public List<String> validate(UserForm form){
+        List<String> errorMessages = new ArrayList<>();
+        String account = form.getAccount();
+        String password = form.getPassword();
+        String confirmPassword = form.getConfirmPassword();
+        String name = form.getName();
+        Integer branchId = form.getBranchId();
+        Integer departmentId = form.getDepartmentId();
+
+        // 必須チェック
+        if (account == null || account.trim().isEmpty()) {
+            errorMessages.add("アカウントを入力してください");
+        } else if (!account.matches("^[a-zA-Z0-9]{6,20}$")) {
+            errorMessages.add("アカウントは半角英数字かつ6文字以上20文字以下で入力してください");
+        }
+
+        if (password == null || password.trim().isEmpty()) {
+            errorMessages.add("パスワードを入力してください");
+        } else if (!password.matches("^[a-zA-Z0-9]{6,20}$")) {
+            errorMessages.add("パスワードは半角英数字かつ6文字以上20文字以下で入力してください");
+        }
+
+        if (confirmPassword == null || confirmPassword.trim().isEmpty()) {
+            errorMessages.add("確認用パスワードを入力してください");
+        } else if (!confirmPassword.matches("^[a-zA-Z0-9]{6,20}$")) {
+            errorMessages.add("確認用パスワードは半角英数字かつ6文字以上20文字以下で入力してください");
+        }
+
+
+        // アカウント重複チェック
+        if (userRepository.findByAccount(account) != null) {
+            errorMessages.add("アカウントが既に使用されています");
+        }
+        //一致してるか確認
+        if (password != null && confirmPassword != null && !password.equals(confirmPassword)) {
+            errorMessages.add("パスワードと確認用パスワードが一致しません");
+        }
+
+        return errorMessages;
+    }
+
+
+    //ユーザーの新規登録メソッド（formをentityに変換してそれを使って追加。）
+    public void registerUser(UserForm form){
+        User user = new User();
+        user.setAccount(form.getAccount());
+        user.setPassword(form.getPassword());
+        user.setName(form.getName());
+        user.setIsStopped(0);
+        user.setBranchId(form.getBranchId());
+        user.setDepartmentId(form.getDepartmentId());
+        user.setCreatedDate(LocalDateTime.now());
+        user.setUpdatedDate(LocalDateTime.now());
+        userRepository.save(user);
+    }
+
+
+}

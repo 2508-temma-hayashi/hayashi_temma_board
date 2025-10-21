@@ -18,4 +18,5 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     """)
     List<User> findAllUsersWithBranchAndDepartment();
     User findByAccountAndPassword(String account, String password);
+    User findByAccount(String account);
 }

@@ -12,15 +12,16 @@
 
 <!--  メニュー -->
 <!-- 全ユーザ共通 -->
-<li><a th:href="@{/post}">新規投稿画面</a></li>
+<ul>
+    <li><a th:href="@{/post}">新規投稿画面</a></li>
 
-<!-- 総務人事部だけ表示 -->
-<li th:if="${buttonFlag == 'ON'}">
-    <a th:href="@{/user/list}">ユーザ管理画面</a>
-</li>
+    <!-- 総務人事部だけ表示 -->
+    <li th:if="${buttonFlag == 'ON'}">
+        <a th:href="@{/user/list}">ユーザ管理画面</a>
+    </li>
 
-<li><a th:href="@{/logout}">ログアウト</a></li>
-
+    <li><a th:href="@{/logout}">ログアウト</a></li>
+</ul>
 
 
 <!-- 絞り込みフォーム -->
