@@ -8,6 +8,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -54,9 +55,48 @@ public class UserController {
             mav.addObject("userForm", form); // 入力保持
             return mav;
         }
-        //エラーがなければ入力内容をServiceに渡してDBに保存☞そのあとリダイレクトでユーザー登録画面表示
+        //エラーがなければ入力内容をServiceに渡してDBに保存☞そのあとリダイレクトでユーザー管理画面表示
         userService.registerUser(form);
         return new ModelAndView("redirect:/user/list");
     }
+
+    //ユーザー編集画面表示
+    @GetMapping("/user/edit/{id}")
+    public ModelAndView showUserEdit(@PathVariable("id") int id){
+        ModelAndView mav = new ModelAndView("userEdit");
+        UserForm form = userService.pickUp(id);
+        mav.addObject("userForm", form);
+        return mav;
+    }
+
+    //ユーザー編集処理
+    @PostMapping("/user/editInfo/{id}")
+    public ModelAndView userUpdate(@PathVariable("id") int id, @ModelAttribute @Validated UserForm form, BindingResult result){
+        ModelAndView mav = new ModelAndView("userEdit");
+
+        // ① Formの中にあったエラー取得
+        List<String> errorMessages = new ArrayList<>();
+        if (result.hasErrors()) {
+            errorMessages.addAll(getErrorMessages(result));
+        }
+
+        // ② サービスのバリデーション由来のエラー取得
+        List<String> customErrors = userService.editValidate(form);
+        if (!customErrors.isEmpty()) {
+            errorMessages.addAll(customErrors);
+        }
+
+        // ③ まとめたリストにエラーがあればまとめて表示
+        if (!errorMessages.isEmpty()) {
+            mav.addObject("errorMessages", errorMessages);
+            mav.addObject("userForm", form); // 入力保持
+            return mav;
+        }
+        form.setId(id); //一応書いておく。
+        //エラーがなければ入力内容をServiceに渡してDBに保存☞そのあとリダイレクトでユーザー管理画面表示
+        userService.updateUser(form);
+        return new ModelAndView("redirect:/user/list");
+    }
+
 
 }

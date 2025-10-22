@@ -2,17 +2,17 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>ユーザー登録</title>
+    <title>ユーザー編集画面</title>
 </head>
 <body>
-<h2>ユーザー登録画面</h2>
+<h2>ユーザー編集画面</h2>
 <!--メニュー-->
 <ul>
+    <li><a th:href="@{/user/list}">ユーザー管理画面に戻る</a></li>
     <li><a th:href="@{/home}">ホーム画面に戻る</a></li>
-    <li><a th:href="@{/user/list}">ユーザー管理画面へ戻る</a></li>
 </ul>
 
-<!--エラーメッセージ表示）-->
+エラーメッセージ
 <div th:if="${errorMessages}">
     <ul>
         <li th:each="err : ${errorMessages}" th:text="${err}"></li>
@@ -20,7 +20,8 @@
 </div>
 
 <!--登録フォーム-->
-<form th:action="@{/user/register}" th:object="${userForm}" method="post">
+<form th:action="@{/user/editInfo/{id}(id=${userForm.id})}" th:object="${userForm}" method="post">
+    <input type="hidden" th:field="*{id}">
 
     <label>アカウント：</label>
     <input type="text" th:field="*{account}"><br>
@@ -52,7 +53,6 @@
     <button type="submit">登録する</button>
 
 </form>
-
 
 </body>
 </html>

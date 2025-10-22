@@ -11,6 +11,7 @@ import lombok.Setter;
 @Setter
 public class UserForm {
 
+    private Integer id;
     private String account;
     private String password;
     private String confirmPassword;
