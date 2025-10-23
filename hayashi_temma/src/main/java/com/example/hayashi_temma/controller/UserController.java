@@ -1,7 +1,9 @@
 package com.example.hayashi_temma.controller;
 
 import com.example.hayashi_temma.controller.form.UserForm;
+import com.example.hayashi_temma.repository.entity.User;
 import com.example.hayashi_temma.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -62,9 +64,12 @@ public class UserController {
 
     //ユーザー編集画面表示
     @GetMapping("/user/edit/{id}")
-    public ModelAndView showUserEdit(@PathVariable("id") int id){
+    public ModelAndView showUserEdit(@PathVariable("id") int id,
+                                     HttpSession session){
+        User loginUser = (User)session.getAttribute("loginUser");
         ModelAndView mav = new ModelAndView("userEdit");
         UserForm form = userService.pickUp(id);
+        mav.addObject("loginUser", loginUser);
         mav.addObject("userForm", form);
         return mav;
     }

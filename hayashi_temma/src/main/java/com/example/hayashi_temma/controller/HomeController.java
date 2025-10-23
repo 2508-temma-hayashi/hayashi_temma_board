@@ -29,6 +29,13 @@ public class HomeController {
     public ModelAndView showHome(@ModelAttribute MessageSearchForm form, HttpSession session){
         ModelAndView mav = new ModelAndView("home");
 
+        // フィルタで入れたメッセージを拾う
+        String errorMessages = (String) session.getAttribute("errorMessages");
+        if (errorMessages != null) {
+            mav.addObject("errorMessages", errorMessages);
+            session.removeAttribute("errorMessages"); // 一度表示したら削除
+        }
+
         //ログインしているのが総務人事部かセッションから確認
         User loginUser = (User) session.getAttribute("loginUser");
         //ログインしてなかったらlogin画面に
@@ -36,7 +43,7 @@ public class HomeController {
             return new ModelAndView("redirect:/login");
         }
         String buttonFlag = "OFF";
-        if(loginUser.getDepartmentId() == 1){
+        if(loginUser.getDepartmentId() == 3){
             buttonFlag = "ON";
         }
 

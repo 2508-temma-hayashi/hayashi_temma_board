@@ -1,58 +1,63 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>ユーザー編集画面</title>
-</head>
-<body>
-<h2>ユーザー編集画面</h2>
-<!--メニュー-->
-<ul>
-    <li><a th:href="@{/user/list}">ユーザー管理画面に戻る</a></li>
-    <li><a th:href="@{/home}">ホーム画面に戻る</a></li>
-</ul>
-
-エラーメッセージ
-<div th:if="${errorMessages}">
+    <!DOCTYPE html>
+    <html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>ユーザー編集画面</title>
+    </head>
+    <body>
+    <h2>ユーザー編集画面</h2>
+    <!--メニュー-->
     <ul>
-        <li th:each="err : ${errorMessages}" th:text="${err}"></li>
+        <li><a th:href="@{/user/list}">ユーザー管理画面に戻る</a></li>
+        <li><a th:href="@{/home}">ホーム画面に戻る</a></li>
     </ul>
-</div>
 
-<!--登録フォーム-->
-<form th:action="@{/user/editInfo/{id}(id=${userForm.id})}" th:object="${userForm}" method="post">
-    <input type="hidden" th:field="*{id}">
+    エラーメッセージ
+    <div th:if="${errorMessages}">
+        <ul>
+            <li th:each="err : ${errorMessages}" th:text="${err}"></li>
+        </ul>
+    </div>
 
-    <label>アカウント：</label>
-    <input type="text" th:field="*{account}"><br>
+    <!--登録フォーム-->
+    <form th:action="@{/user/editInfo/{id}(id=${userForm.id})}" th:object="${userForm}" method="post">
+        <input type="hidden" th:field="*{id}">
 
-    <label>パスワード：</label>
-    <input type="password" th:field="*{password}"><br>
+        <label>アカウント：</label>
+        <input type="text" th:field="*{account}"><br>
 
-    <label>確認用パスワード：</label>
-    <input type="password" th:field="*{confirmPassword}"><br>
+        <label>パスワード：</label>
+        <input type="password" th:field="*{password}"><br>
 
-    <label>氏名：</label>
-    <input type="text" th:field="*{name}"><br>
+        <label>確認用パスワード：</label>
+        <input type="password" th:field="*{confirmPassword}"><br>
 
-    <select th:field="*{branchId}">
-        <option value="">--支社を選択--</option>
-        <option value="1">本社</option>
-        <option value="2">大阪支社</option>
-        <option value="3">福岡支社</option>
-    </select><br/>
-
-    <select th:field="*{departmentId}">
-        <option value="">--部署を選択--</option>
-        <option value="1">営業部</option>
-        <option value="2">技術部</option>
-        <option value="3">総務人事部(本社のみ)</option>
-    </select><br/>
+        <label>氏名：</label>
+        <input type="text" th:field="*{name}"><br>
 
 
-    <button type="submit">登録する</button>
+        <p th:if="${userForm.id == loginUser.id}">
+            ※管理者は自身の支社と部署を変更できません
+        </p>
 
-</form>
+        <select th:field="*{branchId}" th:disabled="${userForm.id == loginUser.id}">
+            <option value="">--支社を選択--</option>
+            <option value="1">本社</option>
+            <option value="2">大阪支社</option>
+            <option value="3">福岡支社</option>
+        </select><br/>
 
-</body>
-</html>
+        <select th:field="*{departmentId}" th:disabled="${userForm.id == loginUser.id}">
+            <option value="">--部署を選択--</option>
+            <option value="1">営業部</option>
+            <option value="2">技術部</option>
+            <option value="3">総務人事部(本社のみ)</option>
+        </select><br/>
+
+
+        <button type="submit">登録する</button>
+
+    </form>
+
+    </body>
+    </html>

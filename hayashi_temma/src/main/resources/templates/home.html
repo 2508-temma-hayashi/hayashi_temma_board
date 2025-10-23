@@ -32,9 +32,13 @@
     <input type="text" th:field="*{category}">
     <button type="submit">絞り込み</button>
 </form>
-
-
 <hr>
+
+<div>
+    <div th:if="${errorMessages != null}">
+        <li th:each="err : ${errorMessages}" th:text="${err}"></li>
+    </div>
+</div>
 
 <!-- 投稿一覧 -->
 <div class="post-area">
@@ -48,7 +52,15 @@
         </div>
 
         <div class="post-content">
-            <p th:text="${msg.text}"></p>
+            タイトル：<span th:text="${msg.title}" style="white-space: pre-wrap;"></span>
+        </div>
+
+        <div class="post-content">
+            カゴテリー：<span th:text="${msg.category}" style="white-space: pre-wrap;"></span>
+        </div>
+
+        <div class="post-content">
+            <p th:text="${msg.text}" style="white-space: pre-wrap;"></p>
         </div>
 
         <!--投稿のユーザーIDとログインしている人のユーザーIDが同じ時だけボタンを表示  -->
@@ -71,20 +83,20 @@
         <!--  コメントループを投稿ループの中に入れる -->
         <div class="comment-area">
             <div class="comment-box"
-                 th:each="c : ${commentList}"
-                 th:if="${c.message.id == msg.id}">
+                 th:each="cmt : ${commentList}"
+                 th:if="${cmt.message.id == msg.id}">
                 <div class="comment-header">
-                    <span th:text="${c.user.name}"></span>
+                    <span th:text="${cmt.user.name}"></span>
                     <span class="comment-date"
-                          th:text="${#temporals.format(c.createdDate, 'yyyy/MM/dd HH:mm')}"></span>
+                          th:text="${#temporals.format(cmt.createdDate, 'yyyy/MM/dd HH:mm')}"></span>
                 </div>
                 <!--コメント本文-->
                 <div class="comment-content">
-                    <p th:text="${c.text}"></p>
+                    <p th:text="${cmt.text}" style="white-space: pre-wrap;"></p>
                 </div>
                 <!--削除ボタン-->
-                <div class="delete_button" th:if="${c.user.id == loginUser.id}">
-                    <form th:action="@{/comment/delete/{id}(id=${c.id})}" method="post" onsubmit="return confirm('本当に削除しますか？');">
+                <div class="delete_button" th:if="${cmt.user.id == loginUser.id}">
+                    <form th:action="@{/comment/delete/{id}(id=${cmt.id})}" method="post" onsubmit="return confirm('本当に削除しますか？');">
                         <input type="submit" value="削除">
                     </form>
                 </div>

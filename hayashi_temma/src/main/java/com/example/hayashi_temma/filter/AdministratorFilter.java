@@ -11,8 +11,10 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 
-@Component
+
+//Springが読み取って、クラスからDIしてオブジェクトを作成して、Beanの箱に入れる
 public class AdministratorFilter implements Filter {
+
 
     @Override
     //「Filter を使うときは、doFilter(ServletRequest, ServletResponse, FilterChain) って名前・引数で書いてね」ってルールがある。
@@ -25,13 +27,13 @@ public class AdministratorFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
 
-        //FilterはSpringよりも先に呼ばれているので自動注入してくれない。書くしかない。
+
         HttpSession session = request.getSession();
         User loginUser = (User)session.getAttribute("loginUser");
 
         //総務人事部なのか確認
-        if(loginUser.getDepartmentId() != 1){
-            session.setAttribute("errorMessage", "無効なアクセスです");
+        if(loginUser.getDepartmentId() != 3){
+            session.setAttribute("errorMessages", "無効なアクセスです");
             response.sendRedirect("/home");
             return;
         }

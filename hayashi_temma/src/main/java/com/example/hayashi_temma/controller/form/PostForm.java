@@ -15,7 +15,7 @@ public class PostForm {
     private String title;
 
     // 本文（1000文字以内）
-    @Pattern(regexp = "^(?![\\s　]*$).+$", message = "本文を入力してください。")
+    @Pattern(regexp = "^(?![\\s　]*$)[\\s\\S]+$", message = "本文を入力してください。")
     @Size(max = 1000, message = "本文は1000文字以内で入力してください")
     private String text;
 

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -30,7 +31,8 @@ public class CommentController {
     @PostMapping("/comment")
     public ModelAndView saveComent(@ModelAttribute @Validated CommentForm form,
                                    BindingResult result,
-                                   HttpSession session) {
+                                   HttpSession session,
+                                   RedirectAttributes redirectAttributes) {
         //resultからエラーメッセージを取得してリストの変数に入れる
         List<String> errorMessages = getErrorMessages(result);
         //セッションからログインしてる人のIDを取得する
@@ -39,8 +41,12 @@ public class CommentController {
 
         //アノテーションにエラーが引っかかってたら発動
         if (result.hasErrors()) {
-            session.setAttribute("errorMessages", errorMessages);
-            session.setAttribute("commentForm", form);//もらったものをお返し。値を保持するために送る
+            //Springが内部でセッションを1回だけ使う（自動削除付き）
+            //リダイレクト先でもModelに自動で乗る
+            //RedirectAttributesはSpringが用意しているリダイレクト専用の「Model」みたいな入れ物
+            //FlashMap（フラッシュマップ） という一時ストレージに保存してくれる
+            redirectAttributes.addFlashAttribute("errorMessages", getErrorMessages(result));
+            redirectAttributes.addFlashAttribute("commentForm", form);
             return new ModelAndView("redirect:/home");
         }
 
