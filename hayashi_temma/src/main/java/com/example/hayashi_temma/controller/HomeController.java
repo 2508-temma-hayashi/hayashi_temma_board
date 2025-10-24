@@ -43,7 +43,7 @@ public class HomeController {
             return new ModelAndView("redirect:/login");
         }
         String buttonFlag = "OFF";
-        if(loginUser.getDepartmentId() == 3){
+        if(loginUser.getDepartmentId() == 1){
             buttonFlag = "ON";
         }
 

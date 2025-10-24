@@ -3,6 +3,7 @@ package com.example.hayashi_temma.service;
 import com.example.hayashi_temma.controller.form.UserForm;
 import com.example.hayashi_temma.repository.UserRepository;
 import com.example.hayashi_temma.repository.entity.User;
+import com.example.hayashi_temma.utils.CipherUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -55,13 +56,6 @@ public class UserService {
             errorMessages.add("パスワードは半角英数字かつ6文字以上20文字以下で入力してください");
         }
 
-        if (confirmPassword == null || confirmPassword.trim().isEmpty()) {
-            errorMessages.add("確認用パスワードを入力してください");
-        } else if (!confirmPassword.matches("^[a-zA-Z0-9]{6,20}$")) {
-            errorMessages.add("確認用パスワードは半角英数字かつ6文字以上20文字以下で入力してください");
-        }
-
-
         // アカウント重複チェック
         if (userRepository.findByAccount(account) != null) {
             errorMessages.add("アカウントが既に使用されています");
@@ -75,16 +69,17 @@ public class UserService {
         if (branchId != null && departmentId != null) {
             boolean invalid = false;
 
-            // 本社(1): 営業部(1)、技術部(2)、総務人事部(3)
-            // 大阪支社(2): 営業部(1)、技術部(2)
-            // 福岡支社(3): 営業部(1)、技術部(2)
+            // 本社(1): 総務人事部(1)、情報管理部(2)
+            // A支社(2): 営業部(3)、技術部(4)
+            // B支社(3): 営業部(3)、技術部(4)
+            // C支社(4): 営業部(3)、技術部(4)
             switch (branchId) {
-                case 1 -> invalid = (departmentId == 1 || departmentId == 2 || departmentId == 3);
-                case 2, 3 -> invalid = (departmentId == 1 || departmentId == 2);
+                case 1 -> invalid = (departmentId != 1 && departmentId != 2);
+                case 2, 3, 4 -> invalid = (departmentId != 3 && departmentId != 4);
                 default -> invalid = true;
             }
 
-            if (!invalid) {
+            if (invalid) {
                 errorMessages.add("支社と部署の組み合わせが不正です");
             }
         }
@@ -96,7 +91,11 @@ public class UserService {
     public void registerUser(UserForm form){
         User user = new User();
         user.setAccount(form.getAccount());
-        user.setPassword(form.getPassword());
+
+        // ここで暗号化してから保存
+        String encryptedPassword = CipherUtil.encrypt(form.getPassword());
+        user.setPassword(encryptedPassword);
+
         user.setName(form.getName());
         user.setIsStopped(0);
         user.setBranchId(form.getBranchId());
@@ -145,12 +144,6 @@ public class UserService {
             errorMessages.add("パスワードは半角英数字かつ6文字以上20文字以下で入力してください");
         }
 
-        if ((confirmPassword != null && !confirmPassword.trim().isEmpty())
-                &&(!confirmPassword.matches("^[a-zA-Z0-9]{6,20}$"))){
-            errorMessages.add("確認用パスワードは半角英数字かつ6文字以上20文字以下で入力してください");
-        }
-
-
         // アカウント重複チェック
         User duplicate = userRepository.findByAccount(form.getAccount());
         if (duplicate != null && !duplicate.getId().equals(form.getId())) {
@@ -165,16 +158,17 @@ public class UserService {
         if (branchId != null && departmentId != null) {
             boolean invalid = false;
 
-            // 本社(1): 営業部(1)、技術部(2)、総務人事部(3)
-            // 大阪支社(2): 営業部(1)、技術部(2)
-            // 福岡支社(3): 営業部(1)、技術部(2)
+            // 本社(1): 総務人事部(1)、情報管理部(2)
+            // A支社(2): 営業部(3)、技術部(4)
+            // B支社(3): 営業部(3)、技術部(4)
+            // C支社(4): 営業部(3)、技術部(4)
             switch (branchId) {
-                case 1 -> invalid = (departmentId == 1 || departmentId == 2 || departmentId == 3);
-                case 2, 3 -> invalid = (departmentId == 1 || departmentId == 2);
+                case 1 -> invalid = (departmentId != 1 && departmentId != 2);
+                case 2, 3, 4 -> invalid = (departmentId != 3 && departmentId != 4);
                 default -> invalid = true;
             }
 
-            if (!invalid) {
+            if (invalid) {
                 errorMessages.add("支社と部署の組み合わせが不正です");
             }
         }

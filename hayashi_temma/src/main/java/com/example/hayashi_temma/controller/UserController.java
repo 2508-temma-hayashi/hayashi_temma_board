@@ -76,7 +76,7 @@ public class UserController {
 
     //ユーザー編集処理
     @PostMapping("/user/editInfo/{id}")
-    public ModelAndView userUpdate(@PathVariable("id") int id, @ModelAttribute @Validated UserForm form, BindingResult result){
+    public ModelAndView userUpdate(@PathVariable("id") int id, @ModelAttribute @Validated UserForm form, BindingResult result, HttpSession session){
         ModelAndView mav = new ModelAndView("userEdit");
 
         // ① Formの中にあったエラー取得
@@ -95,6 +95,7 @@ public class UserController {
         if (!errorMessages.isEmpty()) {
             mav.addObject("errorMessages", errorMessages);
             mav.addObject("userForm", form); // 入力保持
+            mav.addObject("loginUser", session.getAttribute("loginUser"));
             return mav;
         }
         form.setId(id); //一応書いておく。

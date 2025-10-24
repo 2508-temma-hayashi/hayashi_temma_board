@@ -29,7 +29,7 @@ public class AdministratorController {
     }
 
     @PostMapping("/user/update/{id}")
-    public String updatestatus(@PathVariable("id")int userId){
+    public String updateStatus(@PathVariable("id")int userId){
         userService.updatedStatus(userId);
         return "redirect:/user/list";
     }

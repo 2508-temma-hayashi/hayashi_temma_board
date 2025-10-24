@@ -32,7 +32,7 @@ public class AdministratorFilter implements Filter {
         User loginUser = (User)session.getAttribute("loginUser");
 
         //総務人事部なのか確認
-        if(loginUser.getDepartmentId() != 3){
+        if(loginUser.getDepartmentId() != 1){
             session.setAttribute("errorMessages", "無効なアクセスです");
             response.sendRedirect("/home");
             return;

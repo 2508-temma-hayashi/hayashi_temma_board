@@ -43,19 +43,21 @@
         <select th:field="*{branchId}" th:disabled="${userForm.id == loginUser.id}">
             <option value="">--支社を選択--</option>
             <option value="1">本社</option>
-            <option value="2">大阪支社</option>
-            <option value="3">福岡支社</option>
+            <option value="2">支社A</option>
+            <option value="3">支社B</option>
+            <option value="4">支社C</option>
         </select><br/>
 
         <select th:field="*{departmentId}" th:disabled="${userForm.id == loginUser.id}">
             <option value="">--部署を選択--</option>
-            <option value="1">営業部</option>
-            <option value="2">技術部</option>
-            <option value="3">総務人事部(本社のみ)</option>
+            <option value="1">総務人事部(本社のみ)</option>
+            <option value="2">情報管理部(本社のみ)</option>
+            <option value="3">営業部</option>
+            <option value="4">技術部</option>
         </select><br/>
 
 
-        <button type="submit">登録する</button>
+        <button type="submit">編集</button>
 
     </form>
 
